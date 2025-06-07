@@ -3,13 +3,13 @@
     "private": "true",
     "version": "1.12.3",
     "description": "The cutest Discord client mod",
-    "homepage": "https://github.com/Vendicated/Vencord#readme",
+    "homepage": "https://github.com/5GameMaker/Vencord-but-no-csp#readme",
     "bugs": {
-        "url": "https://github.com/Vendicated/Vencord/issues"
+        "url": "https://github.com/5GameMaker/Vencord-but-no-csp/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Vendicated/Vencord.git"
+        "url": "git+https://github.com/5GameMaker/Vencord-but-no-csp.git"
     },
     "license": "GPL-3.0-or-later",
     "author": "Vendicated",

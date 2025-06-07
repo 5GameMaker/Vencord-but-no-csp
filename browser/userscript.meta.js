@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name            Vencord
+// @name            Vencord (but with no CSP)
 // @description     A Discord client mod - Web version
 // @version         %version%
 // @author          Vendicated (https://github.com/Vendicated)
-// @namespace       https://github.com/Vendicated/Vencord
-// @supportURL      https://github.com/Vendicated/Vencord
+// @namespace       https://github.com/5GameMaker/Vencord-but-no-csp
+// @supportURL      https://github.com/5GameMaker/Vencord-but-no-csp
 // @icon            https://raw.githubusercontent.com/Vendicated/Vencord/refs/heads/main/browser/icon.png
 // @license         GPL-3.0
 // @match           *://*.discord.com/*

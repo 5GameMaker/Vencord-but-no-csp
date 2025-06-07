@@ -1,16 +1,9 @@
 name: Bug/Crash Report
-description: Create a bug or crash report for Vencord. ALWAYS FIRST USE OUR SUPPORT CHANNEL! ONLY USE THIS FORM IF YOU ARE A CONTRIBUTOR OR WERE TOLD TO DO SO IN THE SUPPORT CHANNEL.
+description: Create a bug or crash report for Vencord. ONLY USE THIS IF THE BUG CANNOT BE REPRODUCED IN VANILLA VENCORD!
 labels: [bug]
 title: "[Bug] <title>"
 
 body:
-    - type: markdown
-      attributes:
-          value: |
-              ![Are you a developer? No? This form is not for you!](https://github.com/Vendicated/Vencord/blob/main/.github/ISSUE_TEMPLATE/developer-banner.png?raw=true)
-
-              GitHub Issues are for development, not support! Please use our [support server](https://vencord.dev/discord) unless you are a Vencord Developer.
-
     - type: textarea
       id: bug-description
       attributes:
@@ -62,5 +55,5 @@ body:
           options:
               - label: I am using Discord Stable or tried on Stable and this bug happens there as well
                 required: true
-              - label: I am a Vencord Developer
+              - label: I have personally tested this in vanilla Vencord and this bug does not happen there
                 required: true

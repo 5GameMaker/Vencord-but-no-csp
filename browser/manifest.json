@@ -3,9 +3,10 @@
     "minimum_chrome_version": "111",
 
     "name": "Vencord Web",
-    "description": "The cutest Discord mod now in your browser",
+    "description": "The cutest Discord mod now in your browser (but without CSP)",
     "author": "Vendicated",
-    "homepage_url": "https://github.com/Vendicated/Vencord",
+    "homepage_url": "https://github.com/5GameMaker/Vencord-but-no-csp",
+
     "icons": {
         "128": "icon.png"
     },
