@@ -114,7 +114,7 @@ const patchCsp = (headers: PolicyMap) => {
         //     }
         // }
 
-        //headers[header] = [stringifyPolicy(csp)];
+        // headers[header] = [stringifyPolicy(csp)];
         headers[header] = [[
             "default-src * data: mediastream: blob: filesystem: about: ws: wss: 'unsafe-eval' 'wasm-unsafe-eval' 'unsafe-inline'; ",
             "script-src * data: blob: 'unsafe-inline' 'unsafe-eval'; ",
