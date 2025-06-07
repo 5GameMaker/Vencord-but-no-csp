@@ -21,6 +21,10 @@ import { ComponentType, HTMLProps } from "react";
 
 import Plugins from "~plugins";
 
+// must be kept or it breaks Vencord for some reasonAdd commentMore actions
+// thanks, LockBlock-dev (<https://github.com/Vendicated/Vencord/commit/c46fbd17ab09cd320b6ad4fdc71bacf13b873fa6>)
+(Plugins as unknown);
+
 export const enum BadgePosition {
     START,
     END
