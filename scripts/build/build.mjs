@@ -101,6 +101,7 @@ const globNativesPlugin = {
             async function loader() {
                 // TODO: Handle plugin failures.
                 // TODO: Use `import(..)` for .mjs.
+                // @ts-ignore
                 const { PLUGINS_DIR: dirPath } = require("./main/utils/constants");
 
                 if (!await exists(dirPath)) return;
@@ -124,9 +125,11 @@ const globNativesPlugin = {
             /* eslist-disable */
             function patchRequire() {
                 const mod = require('module');
+                // @ts-ignore
                 if (mod.prototype.VENCORDNOCSP_CUSTOM_REQUIRE) return;
                 const nativeRequire = mod.prototype.require;
                 mod.prototype.require = function(path) {
+                    // @ts-ignore
                     const { PLUGINS_DIR } = require("./main/utils/constants");
                     if (path.startsWith("@")) {
                         /** @type {{[key: string]: string}} */
@@ -151,10 +154,12 @@ const globNativesPlugin = {
                             break;
                         }
                         if (path.startsWith("@")) return nativeRequire.bind(this)(path);
+                        // @ts-ignore
                         return requirePkgModule(path);
                     }
                     else return nativeRequire.bind(this)(path);
                 };
+                // @ts-ignore
                 mod.prototype.VENCORDNOCSP_CUSTOM_REQUIRE = true;
             }
             /* eslist-enable */
