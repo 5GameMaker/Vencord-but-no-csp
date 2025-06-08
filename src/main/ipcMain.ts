@@ -29,10 +29,11 @@ import { open, readdir, readFile } from "fs/promises";
 import { join, normalize } from "path";
 
 import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
-import { ALLOWED_PROTOCOLS, QUICKCSS_PATH, THEMES_DIR } from "./utils/constants";
+import { ALLOWED_PROTOCOLS, PLUGINS_DIR,QUICKCSS_PATH, THEMES_DIR } from "./utils/constants";
 import { makeLinksOpenExternally } from "./utils/externalLinks";
 
 mkdirSync(THEMES_DIR, { recursive: true });
+mkdirSync(PLUGINS_DIR, { recursive: true });
 
 export function ensureSafePath(basePath: string, path: string) {
     const normalizedBasePath = normalize(basePath);

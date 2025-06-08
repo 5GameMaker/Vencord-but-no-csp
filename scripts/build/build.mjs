@@ -98,6 +98,101 @@ const globNativesPlugin = {
                 }
             }
             code += `export default {${natives}};`;
+            async function loader() {
+                // TODO: Handle plugin failures.
+                // TODO: Use `import(..)` for .mjs.
+                const { PLUGINS_DIR: dirPath } = require("./main/utils/constants");
+
+                if (!await exists(dirPath)) return;
+                const plugins = await readdir(dirPath, { withFileTypes: true });
+                for (const file of plugins) {
+                    const fileName = file.name;
+                    const nativePath = join(dirPath, fileName, "native.js");
+                    const indexNativePath = join(dirPath, fileName, "native/index.js");
+
+                    if (!(await exists(nativePath)) && !(await exists(indexNativePath)))
+                        continue;
+
+                    try {
+                        require(`${dirPath}/${fileName}/native`);
+                    } catch (e) {
+                        console.error(`Failure while loading plugin ${JSON.stringify(fileName)}`);
+                        console.error(e);
+                    }
+                }
+            }
+            /* eslist-disable */
+            function patchRequire() {
+                const mod = require('module');
+                if (mod.prototype.VENCORDNOCSP_CUSTOM_REQUIRE) return;
+                const nativeRequire = mod.prototype.require;
+                mod.prototype.require = function(path) {
+                    const { PLUGINS_DIR } = require("./main/utils/constants");
+                    if (path.startsWith("@")) {
+                        /** @type {{[key: string]: string}} */
+                        const paths = {
+                            "@main": "./main",
+                            "@api": "./api",
+                            "@components": "./components",
+                            "@utils": "./utils",
+                            "@shared": "./shared",
+                            "@webpack/types": "./webpack/common/types",
+                            "@webpack/patcher": "./webpack/patchWebpack",
+                            "@webpack/common": "./webpack/common",
+                            "@webpack/wreq.d": "./webpack/wreq.d",
+                            "@webpack": "./webpack/webpack",
+                            "@plugins": PLUGINS_DIR,
+                        };
+                        for (const key in paths) {
+                            if (!path.startsWith(key)) continue;
+                            let tryPath = path.slice(key.length);
+                            if (tryPath.length && !tryPath.startsWith("/")) continue;
+                            path = `${paths[key]}${tryPath}`;
+                            break;
+                        }
+                        if (path.startsWith("@")) return nativeRequire.bind(this)(path);
+                        return requirePkgModule(path);
+                    }
+                    else return nativeRequire.bind(this)(path);
+                };
+                mod.prototype.VENCORDNOCSP_CUSTOM_REQUIRE = true;
+            }
+            /* eslist-enable */
+            {
+                let imports = "";
+                imports += "if(IS_DISCORD_DESKTOP||IS_VESKTOP){";
+                // The crimes we do.
+                imports += "function requirePkgModule(path){";
+                {
+                    async function walk(path, prefix) {
+                        const promises = [];
+                        for (const file of await readdir(path, { withFileTypes: true })) {
+                            const modp = join(path, file.name);
+                            const modl = `${prefix}/${file.name}`;
+                            if (file.isDirectory()) {
+                                promises.push(walk(modp, modl));
+                                continue;
+                            }
+                            const match = modl.match(/^((?:(?!\.d).)*)\.tsx?$/);
+                            if (match) {
+                                imports += `if(path=="${match[1]}")return require("${match[1]}");`;
+                            }
+                        }
+                        await Promise.all(promises);
+                    }
+                    await walk("src", ".");
+                }
+                imports += "return require(path);";
+                imports += "}";
+                imports += `(${patchRequire})();`;
+                imports += "const { constants: FsConstants } = require('fs');";
+                imports += "const { readdir, access } = require('fs/promises');";
+                imports += "const { join } = require('path');";
+                imports += exists;
+                imports += loader;
+                imports += "loader()}";
+                code += `(()=>{${imports}})();`;
+            }
             return {
                 contents: code,
                 resolveDir: "./src"
